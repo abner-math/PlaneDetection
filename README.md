@@ -32,7 +32,7 @@ The actual article implementation is located here:
 
 ## Project structure
 
-Basically, this project is structure in four main subprojects:
+Basically, this project is structured in four main subprojects:
 - CoreLib (contains the main classes such as Point, PointCloud, Plane...)
 - DetectionLib (this is where the plane detection algorithm is implemented, see class PlaneDetector)
 - GraphicsLib (OpenGL utilities used by the UI)
@@ -44,8 +44,3 @@ Besides the Qt project, this repository also contains a small cpp file used to c
 
 `compare_plane_detector`
 
-## UI Usage 
-
-This project contains an UI, which can be used to load a point cloud, visualize it, detect planes and visualized detected planes. 
-
-In order to use it, open the `PointCloudEditor` project. 
