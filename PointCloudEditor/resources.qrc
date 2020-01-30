@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/phongfragmentshader.frag</file>
+        <file>shaders/phongvertexshader.vsh</file>
+    </qresource>
+</RCC>
