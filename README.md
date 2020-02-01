@@ -4,11 +4,10 @@ This is the implementation of the following article:
 
 ```
 @article{AraujoOliveira_2020a,
-    author  = {Abner M. C. Araujo and Manuel M. Oliveira},
+    author  = {Abner M. Araujo and Manuel M. Oliveira},
     title   = {A Robust Statistics Approach for Plane Detection in Unorganized Point Clouds},
     journal = {Pattern Recognition},
     volume  = {100},
-    number  = {?},
     DOI     = {10.1016/j.patcog.2019.107115},
     ISSN    = {0031-3203},
     pages   = {107115},
@@ -16,7 +15,7 @@ This is the implementation of the following article:
 }
 ```
 
-If case you use it in our research, please cite our work.
+If case you use it in your research, please cite our work.
 
 Access our homepage to get access to the paper pdf:
 
