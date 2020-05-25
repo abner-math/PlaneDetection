@@ -1,3 +1,7 @@
+## Important
+
+**Before estimating a plane (On Plane Detector > Detect planes), you need to estimate normals first (Plane Detector > Estimate normals).**
+
 ## About
 
 This is the implementation of the following article:
