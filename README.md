@@ -21,7 +21,7 @@ This is the implementation of the following article:
 
 If case you use it in your research, please cite our work.
 
-Access our homepage to get access to the paper pdf:
+Access our homepage to get access to the paper pdf and datasets:
 
 https://www.inf.ufrgs.br/~oliveira/pubs_files/RE/RE.html
 
