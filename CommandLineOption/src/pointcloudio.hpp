@@ -7,13 +7,11 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <QObject>
 
 #include "pointcloud.h"
 
-class PointCloudIO : public QObject
+class PointCloudIO 
 {
-    Q_OBJECT
 public:
     void saveGeometry(const Geometry *geometry, const std::string &filename)
     {
@@ -21,15 +19,10 @@ public:
         if (fp == NULL)
             throw "Could not open file: " + filename;
 
-        emit save(QString("circles"));
         size_t numCircles = geometry->numCircles();
         fwrite(&numCircles, sizeof(size_t), 1, fp);
         for (size_t i = 0; i < numCircles; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit saveProgress(i / (float)numCircles);
-            }
             const Circle *circle = geometry->circle(i);
             Eigen::Vector3f color = circle->color();
             Eigen::Vector2f center = circle->center();
@@ -43,15 +36,10 @@ public:
             fwrite(inliers.data(), sizeof(size_t), numInliers, fp);
         }
 
-        emit save(QString("planes"));
         size_t numPlanes = geometry->numPlanes();
         fwrite(&numPlanes, sizeof(size_t), 1, fp);
         for (size_t i = 0; i < numPlanes; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit saveProgress(i / (float)numPlanes);
-            }
             const Plane *plane = geometry->plane(i);
             Eigen::Vector3f color = plane->color();
             Eigen::Vector3f center = plane->center();
@@ -69,15 +57,10 @@ public:
             fwrite(inliers.data(), sizeof(size_t), numInliers, fp);
         }
 
-        emit save(QString("cylinders"));
         size_t numCylinders = geometry->numCylinders();
         fwrite(&numCylinders, sizeof(size_t), 1, fp);
         for (size_t i = 0; i < numCylinders; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit saveProgress(i / (float)numCylinders);
-            }
             const Cylinder *cylinder = geometry->cylinder(i);
             Eigen::Vector3f color = cylinder->color();
             Eigen::Vector3f center = cylinder->center();
@@ -103,14 +86,9 @@ public:
         if (fp == NULL)
             throw "Could not open file: " + filename;
 
-        emit save(QString("connectivity"));
         size_t size = connectivity->numPoints();
         for (size_t i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)size);
-            }
             size_t numNeighbors = connectivity->neighbors(i).size();
             fwrite(&numNeighbors, sizeof(size_t), 1, fp);
             std::vector<size_t> edges;
@@ -142,10 +120,6 @@ public:
 
         for (size_t i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)size);
-            }
             const Point<DIMENSION> &point = pointCloud->at(i);
             float intensity = point.intensity();
             float normalConfidence = point.normalConfidence();
@@ -184,23 +158,13 @@ public:
         int size = static_cast<int>(pointCloud->size());
         fwrite(&size, sizeof(int), 1, fp);
 
-        emit save(QString("positions"));
         for (int i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)size);
-            }
             fwrite(pointCloud->at(i).position().data(), sizeof(float), 3, fp);
         }
 
-        emit save(QString("normals"));
         for (int i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)size);
-            }
             fwrite(pointCloud->at(i).normal().data(), sizeof(float), 3, fp);
         }
 
@@ -215,10 +179,6 @@ public:
 
         for (size_t i = 0; i < pointCloud->size(); i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)pointCloud->size());
-            }
             Eigen::Vector3f position = pointCloud->at(i).position();
             fprintf(fp, "%f %f %f", position.x(), position.y(), position.z());
             if (pointCloud->hasMode(PointCloud3d::Mode::COLOR))
@@ -240,10 +200,6 @@ public:
 
         for (size_t i = 0; i < pointCloud->size(); i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit saveProgress(i / (float)pointCloud->size());
-            }
             Eigen::Vector3f position = pointCloud->at(i).position();
             fprintf(fp, "%f %f %f", position.x(), -position.z(), position.y());
             if (pointCloud->hasMode(PointCloud3d::Mode::INTENSITY))
@@ -297,15 +253,10 @@ public:
 
         Geometry *geometry = new Geometry;
 
-        emit load(QString("circles"));
         size_t numCircles;
         fread(&numCircles, sizeof(size_t), 1, fp);
         for (size_t i = 0; i < numCircles; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit loadProgress(i / (float)numCircles);
-            }
             float color[3];
             float center[2];
             float radius;
@@ -322,16 +273,11 @@ public:
             geometry->addCircle(circle);
         }
 
-        emit load(QString("planes"));
         size_t numPlanes;
         fread(&numPlanes, sizeof(size_t), 1, fp);
         std::cout << "Planes=" << numPlanes << std::endl;
         for (size_t i = 0; i < numPlanes; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit loadProgress(i / (float)numPlanes);
-            }
             float color[3];
             float center[3];
             float normal[3];
@@ -354,16 +300,11 @@ public:
             geometry->addPlane(plane);
         }
 
-        emit load(QString("cylinders"));
         size_t numCylinders;
         fread(&numCylinders, sizeof(size_t), 1, fp);
         std::cout << "Cylinders=" << numCylinders << std::endl;
         for (size_t i = 0; i < numCylinders; i++)
         {
-            if (i % 100 == 0)
-            {
-                emit loadProgress(i / (float)numCylinders);
-            }
             float color[3];
             float center[3];
             float axis[3];
@@ -397,14 +338,8 @@ public:
 
         ConnectivityGraph *connectivity = new ConnectivityGraph(size);
 
-        emit load(QString("connectivity"));
-
         for (size_t i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit loadProgress(i / (float)size);
-            }
             size_t numEdges;
             fread(&numEdges, sizeof(size_t), 1, fp);
             size_t *edges = new size_t[numEdges];
@@ -447,10 +382,6 @@ public:
 
         for (size_t i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit loadProgress(i / (float)size);
-            }
             float position[DIMENSION];
             float color[DIMENSION];
             float intensity;
@@ -509,38 +440,23 @@ public:
         std::vector<Eigen::Vector3f> positions(size);
         std::vector<Eigen::Vector3f> normals(size);
 
-        emit load(QString("positions"));
         for (int i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit loadProgress(i / (float)size);
-            }
             float position[3];
             fread(position, sizeof(float), 3, fp);
             positions[i] = Eigen::Vector3f(position);
         }
 
-        emit load(QString("normals"));
         for (int i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit loadProgress(i / (float)size);
-            }
             float normal[3];
             fread(normal, sizeof(float), 3, fp);
             normals[i] = Eigen::Vector3f(normal).normalized();
         }
 
-        emit load(QString("points"));
         std::vector<Point3d> points(size);
         for (int i = 0; i < size; i++)
         {
-            if (i % 1000 == 0)
-            {
-                emit loadProgress(i / (float)size);
-            }
             points[i].position(positions[i]);
             points[i].normal(normals[i]);
         }
@@ -655,12 +571,6 @@ public:
         }
         return pointCloud;
     }
-
-signals:
-    void loadProgress(float);
-    void load(const QString&);
-    void saveProgress(float);
-    void save(const QString&);
 
 };
 

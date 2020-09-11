@@ -6,7 +6,6 @@
 
 #include <iostream>
 #include <unordered_map>
-#include <QElapsedTimer>
 
 PlaneDetector::PlaneDetector(const PointCloud3d *pointCloud)
     : PrimitiveDetector<3, Plane>(pointCloud)
@@ -22,31 +21,12 @@ std::set<Plane*> PlaneDetector::detect()
     std::set<Plane*> planes;
 
     clearRemovedPoints();
-    for (size_t i = 0; i < pointCloud()->geometry()->numPlanes(); i++)
-    {
-        for (const size_t &inlier : pointCloud()->geometry()->plane(i)->inliers())
-        {
-            removePoint(inlier);
-        }
-    }
 
-    std::cout << mMinNormalDiff << " " << mMaxDist << " " << mOutlierRatio << std::endl;
-
-    float timeDetectPatches = 0;
-    float timeMerge = 0;
-    float timeGrowth = 0;
-    float timeRelaxedGrowth = 0;
-    float timeUpdate = 0;
-    float timeDelimit = 0;
-
-    QElapsedTimer timer;
-    timer.start();
     size_t minNumPoints = std::max(size_t(10), size_t(pointCloud()->size() * 0.001f));
     StatisticsUtils statistics(pointCloud()->size());
     Octree octree(pointCloud());
     std::vector<PlanarPatch*> patches;
     detectPlanarPatches(&octree, &statistics, minNumPoints, patches);
-    timeDetectPatches += timer.nsecsElapsed() / 1e9;
 
     mPatchPoints = std::vector<PlanarPatch*>(pointCloud()->size(), NULL);
     for (PlanarPatch *patch : patches)
@@ -57,29 +37,15 @@ std::set<Plane*> PlaneDetector::detect()
         }
     }
 
-    std::cout << "#" << patches.size() << std::endl;
     bool changed;
     do
     {
-        timer.start();
         growPatches(patches);
-        timeGrowth += timer.nsecsElapsed() / 1e9;
-
-        timer.start();
         mergePatches(patches);
-        timeMerge += timer.nsecsElapsed() / 1e9;
-        std::cout << "#" << patches.size() << std::endl;
-
-        timer.start();
         changed = updatePatches(patches);
-        timeUpdate += timer.nsecsElapsed() / 1e9;
     } while (changed);
 
-    timer.start();
     growPatches(patches, true);
-    timeRelaxedGrowth += timer.nsecsElapsed() / 1e9;
-
-    timer.start();
     std::vector<PlanarPatch*> truePositivePatches;
     for (PlanarPatch *patch : patches)
     {
@@ -94,8 +60,6 @@ std::set<Plane*> PlaneDetector::detect()
         }
     }
     patches = truePositivePatches;
-    std::cout << "#" << patches.size() << std::endl;
-    timeDelimit += timer.nsecsElapsed() / 1e9;
 
     for (PlanarPatch *patch : patches)
     {
@@ -104,15 +68,6 @@ std::set<Plane*> PlaneDetector::detect()
         planes.insert(plane);
         delete patch;
     }
-
-    std::cout << "#" << patches.size() << std::endl;
-    std::cout << "Detect planar patches - Time elapsed: " << timeDetectPatches << "s" <<  std::endl;
-    std::cout << "Merge patches - Time elapsed: " << timeMerge << "s" <<  std::endl;
-    std::cout << "Grow patches - Time elapsed: " << timeGrowth << "s" <<  std::endl;
-    std::cout << "Relaxed Grow patches - Time elapsed: " << timeRelaxedGrowth << "s" <<  std::endl;
-    std::cout << "Update - Time elapsed: " << timeUpdate << "s" <<  std::endl;
-    std::cout << "Total time elapsed: " << timeDetectPatches + timeMerge + timeGrowth + timeRelaxedGrowth + timeUpdate << "s" << std::endl;
-    std::cout << "Delimit planes - Time elapsed: " << timeDelimit << "s" <<  std::endl;
 
     return planes;
 }
