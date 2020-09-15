@@ -63,8 +63,16 @@ int main(int argc, char **argv)
     std::ofstream outputFile(outputFileName + ".txt");
     for (Plane *plane : planes)
     {
-        outputFile << "Normal: " << plane->normal()[0] << ", " << plane->normal()[1] << ", " << plane->normal()[2] <<
-                    "; Center: " << plane->center()[0] << ", " << plane->center()[1] << ", " << plane->center()[2] << std::endl;
+        Eigen::Vector3f v1 = plane->center() + plane->basisU() + plane->basisV();
+        Eigen::Vector3f v2 = plane->center() + plane->basisU() - plane->basisV();
+        Eigen::Vector3f v3 = plane->center() - plane->basisU() + plane->basisV();
+        Eigen::Vector3f v4 = plane->center() - plane->basisU() - plane->basisV(); 
+        outputFile << "Normal: [" << plane->normal()[0] << ", " << plane->normal()[1] << ", " << plane->normal()[2] << "]; " <<
+                    "Center: [" << plane->center()[0] << ", " << plane->center()[1] << ", " << plane->center()[2] << "]; " <<
+                    "Vertices: [[" << v1.x() << "," << v1.y() << "," << v1.z() << "], " <<
+                                 "[" << v2.x() << "," << v2.y() << "," << v2.z() << "], " << 
+                                 "[" << v3.x() << "," << v3.y() << "," << v3.z() << "], " << 
+                                 "[" << v4.x() << "," << v4.y() << "," << v4.z() << "]]" << std::endl;
     }
 
     delete pointCloud;
