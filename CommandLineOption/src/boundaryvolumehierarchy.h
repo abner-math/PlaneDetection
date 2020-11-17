@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <set>
+#include <iostream>
 
 #include "partitioner.h"
 

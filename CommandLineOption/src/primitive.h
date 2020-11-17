@@ -2,6 +2,7 @@
 #define PRIMITIVE_H
 
 #include <set>
+#include <vector>
 
 #include <Eigen/Core>
 

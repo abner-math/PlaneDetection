@@ -2,6 +2,8 @@
 #define PRIMITIVEDETECTOR_H
 
 #include <set>
+#include <iostream>
+#include <numeric>
 
 #include "primitive.h"
 #include "pointcloud.h"
