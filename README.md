@@ -26,7 +26,7 @@ https://www.inf.ufrgs.br/~oliveira/pubs_files/RE/RE.html
 
 ## Open3D
 
-Thanks to [@plusk01](https://github.com/plusk01), this algorithm has been ported to the [Open3D](https://open3d.org) library. Check [here](https://github.com/isl-org/Open3D/blob/4214a0d8f10ec46f1fd1787e76fa56027fe7f7ed/cpp/open3d/geometry/PointCloud.h#L393) or proceed if you want to use the standalone version.
+Thanks to [@plusk01](https://github.com/plusk01), this algorithm has been included in the [Open3D](https://open3d.org) library. Check [here](https://github.com/isl-org/Open3D/blob/4214a0d8f10ec46f1fd1787e76fa56027fe7f7ed/cpp/open3d/geometry/PointCloud.h#L393) or proceed if you want to use the standalone version.
 
 ## Usage 
 
