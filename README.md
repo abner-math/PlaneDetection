@@ -30,7 +30,7 @@ There are two interfaces to use our algorithm: a graphical interface and a comma
 
 ### Command Line 
 
-The command line is available in the `CommandLineOption` directory. There are no external dependencies, just call `make` to compile the project.
+The command line interface is available in the `CommandLine` directory. There are no external dependencies, just call `make` to compile the project.
 
 ### Graphical Interface 
 
@@ -56,7 +56,7 @@ This project is structured into four main subprojects:
 
 ## Evaluating technique performance 
 
-Besides the Graphical Interface and Command Line, this repository also contains a small cpp file used to calculate some metrics (F1 score, recall, precision, etc.) for a given detection. Please, refer to: 
+Besides the graphical interface and comamnd line, this repository also contains a small project to calculate some metrics (F1 score, recall, precision, etc.) for a given plane detection. Please, refer to: 
 
-`compare_plane_detector`
+`ComparePlaneDetector`
 
