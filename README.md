@@ -30,7 +30,7 @@ There are two interfaces to use our algorithm: a graphical interface and a comma
 
 ### Command Line 
 
-The command line option is available in the `CommandLineOption` directory. There are no external dependencies, just call `make` to compile the program.
+The command line is available in the `CommandLineOption` directory. There are no external dependencies, just call `make` to compile the program.
 
 ### Graphical Interface 
 
